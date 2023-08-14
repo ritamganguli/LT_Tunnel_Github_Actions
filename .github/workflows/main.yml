@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: 12
       - run: |
+          cd smart_ui
           python -m pip install --upgrade pip
           pip install selenium
           pip install pip install Appium-Python-Client
@@ -33,7 +34,9 @@ jobs:
           accessKey: ${{ secrets.LT_ACCESS_KEY }}
           tunnelName: "test tunnel"
 
-        run: python android.py
+        run: |
+          cd smart_ui
+          python android.py
 
       - name: Export Tunnel Logs for debugging
         uses: actions/upload-artifact@v2
