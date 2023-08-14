@@ -1,4 +1,4 @@
-name: Test Tunnel
+name: Smart UI Test
 
 on: push
 
@@ -10,7 +10,7 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - name: Install Node.js, NPM and Yarn
+      - name: Install Python Dependency
         uses: actions/setup-node@v1
         with:
           node-version: 12
