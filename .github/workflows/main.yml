@@ -11,10 +11,13 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Install Node.js, NPM and Yarn
-          uses: 
-            with:
-              node-version: 12
-      - run: npm install
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: |
+          python -m pip install --upgrade pip
+          pip install selenium
+          pip install pip install Appium-Python-Client
 
       - name: Start LambdaTest Tunnel
         id: tunnel
@@ -29,14 +32,8 @@ jobs:
           username: ${{ secrets.LT_USERNAME }}
           accessKey: ${{ secrets.LT_ACCESS_KEY }}
           tunnelName: "test tunnel"
-          
-      - name: Run Test Case Of Smart UI
-        run: |
-          python -m pip install --upgrade pip
-          pip install selenium
-          pip install pip install Appium-Python-Client
-          python android.py
-    
+
+        run: python android.py
 
       - name: Export Tunnel Logs for debugging
         uses: actions/upload-artifact@v2
