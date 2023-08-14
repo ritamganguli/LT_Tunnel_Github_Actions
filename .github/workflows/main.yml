@@ -20,14 +20,14 @@ jobs:
         id: tunnel
         uses: ./ # Uses an action in the root directory
         with:
-          user:"ritamg@lambdatest.com"
-          accessKey:"lHWNSA0QECwjeN8DoDb9U6KyXMBgAFXqlIIArkxeOTDSeEdLyG"
+          user:ritamg@lambdatest.com
+          accessKey:lHWNSA0QECwjeN8DoDb9U6KyXMBgAFXqlIIArkxeOTDSeEdLyG
           tunnelName: "test tunnel"
 
       - name: Run Test Case
         env:
-          username:"ritamg"
-          accessKey:"lHWNSA0QECwjeN8DoDb9U6KyXMBgAFXqlIIArkxeOTDSeEdLyG"
+          username:ritamg
+          accessKey:lHWNSA0QECwjeN8DoDb9U6KyXMBgAFXqlIIArkxeOTDSeEdLyG
           tunnelName: "test tunnel"
 
         run: npm test
