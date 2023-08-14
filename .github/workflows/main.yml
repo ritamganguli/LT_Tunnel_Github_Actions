@@ -1,52 +1,39 @@
-import unittest
+name: Test Tunnel
 
-from selenium import webdriver
-import os
+on: push
 
+jobs:
+  test-tunnel:
+    runs-on: ubuntu-latest
 
-username = "ritamg"  # Replace the username
-access_key ="lHWNSA0QECwjeN8DoDb9U6KyXMBgAFXqlIIArkxeOTDSeEdLyG"  # Replace the access key
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
 
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm install
 
-class FirstSampleTest(unittest.TestCase):
-    # Generate capabilities from here: https://www.lambdatest.com/capabilities-generator/
-    # setUp runs before each test case and
-    def setUp(self):
-        chrome_options = webdriver.ChromeOptions()
-        option = {
-            "build": 'PyunitTest sample build',  # Change your build name here
-            "name": 'Py-unittest',  # Change your test name here
-            "browserName": 'Chrome',
-            "version": 'latest',
-            "platform": 'Windows 10',
-            # "resolution": '1024x768', # change the resolution
-            "network": 'true',  # Enable or disable network logs
-            "smartUI.project": "Testing-Smart-UI-98"
-            # Build name for smartUI(optional)
-            # "smartUI.build" : "buildName"
-        }
-        chrome_options.set_capability("LT:Options", option)
-        self.driver = webdriver.Remote(
-            command_executor="https://{}:{}@hub.lambdatest.com/wd/hub".format(
-                username, access_key),
-            options = chrome_options
-        )
-    # tearDown runs after each test case
+      - name: Start LambdaTest Tunnel
+        id: tunnel
+        uses: ./ # Uses an action in the root directory
+        with:
+          user: ${{ secrets.LT_EMAIL }}
+          accessKey: ${{ secrets.LT_ACCESS_KEY }}
+          tunnelName: "test tunnel"
 
-    def tearDown(self):
-        self.driver.quit()
+      - name: Run Test Case
+        env:
+          username: ${{ secrets.LT_USERNAME }}
+          accessKey: ${{ secrets.LT_ACCESS_KEY }}
+          tunnelName: "test tunnel"
 
-    # """ You can write the test cases here """
-    def test_unit_user_should_able_to_add_item(self):
-        # try:
-        driver = self.driver
+        run: npm test
 
-        # Url
-        driver.get("https://accounts.lambdatest.com/login")
-        print("Taking screenshot")
-        driver.execute_script("smartui.takeScreenshot,{\"screenshotName\":\"dom-screenshot\", \"ignoreDOM\":{\"id\":[\"email\"]}}")
-        print("screenshot taken successfully")
-
-
-if __name__ == "__main__":
-    unittest.main()
+      - name: Export Tunnel Logs for debugging
+        uses: actions/upload-artifact@v2
+        with:
+          name: tunnel_logs
+          path: ${{ steps.tunnel.outputs.logFileName }}
