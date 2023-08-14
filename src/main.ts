@@ -4,7 +4,7 @@ import getPort from "get-port";
 import childProcess from "child_process";
 
 /**
- * Name of state that stores port number of the tunnel
+ * Name of state that stores port number of the tunnel ritam
  */
 const STATE_PORT = "port";
 
