@@ -14,11 +14,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: |
-          cd smart_ui
-          python -m pip install --upgrade pip
-          pip install selenium
-          pip install pip install Appium-Python-Client
 
       - name: Start LambdaTest Tunnel
         id: tunnel
@@ -33,10 +28,6 @@ jobs:
           username: ${{ secrets.LT_USERNAME }}
           accessKey: ${{ secrets.LT_ACCESS_KEY }}
           tunnelName: "test tunnel"
-
-        run: |
-          cd smart_ui
-          python android.py
 
       - name: Export Tunnel Logs for debugging
         uses: actions/upload-artifact@v2
